@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Lista de Tarefas</title>
+</head>
+<body>
+    <main>
+        <div class="content">
+            <header>
+                <h1 class="titulo">Lista de Tarefas</h1>
+            </header>
+            <section>
+                <div class="quadro">
+                    <h2 id="titulo_quadro">Sua lista de tarefas</h2>
+                    <input type="text" id="nova-tarefa" placeholder="Adicionar nova tarefa...">
+                    <button onclick="adicionarTarefa()">Adicionar</button>
+                    <ul id="lista-tarefas"></ul>
+                </div>
+            </section>
+            <footer>
+                <h5 class="info">Renato de Freitas David Campiteli</h5>
+                <h5 class="info">(11) 97210-8084</h5>
+                <h5 class="info">renatofdavidc@gmail.com</h5>
+            </footer>
+        </div>
+    </main>
+
+    <script>
+        // Função para carregar as tarefas salvas
+        function loadTasks() {
+            let tarefas = JSON.parse(localStorage.getItem('tarefas')) || [];
+            tarefas.forEach(tarefa => {
+                createTaskElement(tarefa.text, tarefa.done);
+            });
+        }
+
+        // Função para salvar as tarefas no localStorage
+        function saveTasks() {
+            let tarefas = [];
+            document.querySelectorAll('#lista-tarefas li').forEach(li => {
+                tarefas.push({
+                    text: li.querySelector('span').innerText,
+                    done: li.querySelector('span').style.textDecoration === "line-through"
+                });
+            });
+            localStorage.setItem('tarefas', JSON.stringify(tarefas));
+        }
+
+        // Função para criar um novo elemento de tarefa
+        function createTaskElement(text, done) {
+            let li = document.createElement('li');
+            let span = document.createElement('span');
+            span.innerText = text;
+            if (done) {
+                span.style.textDecoration = "line-through";
+            }
+
+            li.appendChild(span);
+            li.innerHTML += `
+                <button onclick="editTask(this)">Editar</button>
+                <button onclick="checkTask(this)">Concluída</button>
+                <button onclick="removeTask(this)">Remover</button>
+            `;
+            document.getElementById('lista-tarefas').appendChild(li);
+        }
+
+        // Função para adicionar uma nova tarefa
+        function adicionarTarefa() {
+            let tarefa = document.getElementById('nova-tarefa').value;
+            if (tarefa.trim() !== "") {
+                createTaskElement(tarefa, false);
+                saveTasks();
+                document.getElementById('nova-tarefa').value = ""; // Limpa o campo
+            }
+        }
+
+        // Função para editar tarefa
+        function editTask(button) {
+            let tarefa = prompt("Editar tarefa:", button.parentElement.querySelector('span').innerText);
+            if (tarefa !== null) {
+                button.parentElement.querySelector('span').innerText = tarefa;
+                saveTasks();
+            }
+        }
+
+        // Função para marcar tarefa como concluída
+        function checkTask(button) {
+            let span = button.parentElement.querySelector('span');
+            span.style.textDecoration = "line-through";
+            saveTasks();
+        }
+
+        // Função para remover tarefa
+        function removeTask(button) {
+            button.parentElement.remove();
+            saveTasks();
+        }
+
+        // Carrega as tarefas quando a página é carregada
+        window.onload = function() {
+            loadTasks();
+        }
+    </script>
+</body>
+</html>

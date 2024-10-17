@@ -1,0 +1,75 @@
+* {
+    padding: 0;
+    margin: 0 auto;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+header {
+    height: 100px;
+    width: 100%;
+    background-color: khaki;
+    align-items: center;
+    display: flex;
+    color: rgb(87, 87, 87);
+}
+
+.titulo {
+    text-align: center;
+    justify-content: center;
+}
+
+.quadro {
+    margin-top: 60px;
+    width: 900px;
+    background-color: rgb(219, 219, 219);
+    height: auto;
+    padding: 20px;
+    margin-bottom: 40px;
+    border-radius: 30px;
+}
+
+#titulo_quadro {
+    text-align: center;
+    margin-bottom: 20px;
+    color: rgb(87, 87, 87);
+}
+
+#nova-tarefa {
+    width: 70%;
+    padding: 10px;
+    margin-right: 10px;
+}
+
+input{
+    border-radius: 5px;
+}
+
+button {
+    padding: 10px;
+    background-color: khaki;
+    border: none;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgb(87, 87, 87);
+}
+
+li span {
+    flex-grow: 1;
+}
+
+footer {
+    height: 70px;
+    background-color: khaki;
+}
