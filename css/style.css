@@ -16,6 +16,8 @@ header {
 .titulo {
     text-align: center;
     justify-content: center;
+    border-bottom: 2px solid brown;
+    width: 300px;
 }
 
 .quadro {
@@ -50,6 +52,12 @@ button {
     border: none;
     cursor: pointer;
     margin-right: 5px;
+    border-radius: 5px;
+}
+
+button:hover{
+    background-color: rgb(87, 87, 87);
+    color: white;
 }
 
 ul {
