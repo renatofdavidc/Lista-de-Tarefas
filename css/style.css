@@ -81,3 +81,9 @@ footer {
     height: 70px;
     background-color: khaki;
 }
+
+#conteudo_footer{
+    align-items: center;
+    text-align: center;
+    
+}

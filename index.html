@@ -15,9 +15,9 @@
             <section>
                 <div class="quadro">
                     <h2 id="titulo_quadro">Sua lista de tarefas</h2>
-                    <input type="text" id="nova-tarefa" placeholder="Adicionar nova tarefa...">
-                    <button onclick="adicionarTarefa()">Adicionar</button>
-                    <ul id="lista-tarefas"></ul>
+                    <input type="text" id="nova-tarefa" placeholder="Adicionar nova tarefa">
+                    <button id="adicionar-tarefa-btn">Adicionar Tarefa</button>
+                    <ul id="lista-tarefas"></ul> 
                 </div>
             </section>
             <footer>
@@ -28,74 +28,6 @@
         </div>
     </main>
 
-    <script>
-
-        function loadTasks() {
-            let tarefas = JSON.parse(localStorage.getItem('tarefas')) || [];
-            tarefas.forEach(tarefa => {
-                createTaskElement(tarefa.text, tarefa.done);
-            });
-        }
-
-        function saveTasks() {
-            let tarefas = [];
-            document.querySelectorAll('#lista-tarefas li').forEach(li => {
-                tarefas.push({
-                    text: li.querySelector('span').innerText,
-                    done: li.querySelector('span').style.textDecoration === "line-through"
-                });
-            });
-            localStorage.setItem('tarefas', JSON.stringify(tarefas));
-        }
-
-        function createTaskElement(text, done) {
-            let li = document.createElement('li');
-            let span = document.createElement('span');
-            span.innerText = text;
-            if (done) {
-                span.style.textDecoration = "line-through";
-            }
-
-            li.appendChild(span);
-            li.innerHTML += `
-                <button onclick="editTask(this)">Editar</button>
-                <button onclick="checkTask(this)">Concluída</button>
-                <button onclick="removeTask(this)">Remover</button>
-            `;
-            document.getElementById('lista-tarefas').appendChild(li);
-        }
-
-        function adicionarTarefa() {
-            let tarefa = document.getElementById('nova-tarefa').value;
-            if (tarefa.trim() !== "") {
-                createTaskElement(tarefa, false);
-                saveTasks();
-                document.getElementById('nova-tarefa').value = ""; 
-            }
-        }
-
-        function editTask(button) {
-            let tarefa = prompt("Editar tarefa:", button.parentElement.querySelector('span').innerText);
-            if (tarefa !== null) {
-                button.parentElement.querySelector('span').innerText = tarefa;
-                saveTasks();
-            }
-        }
-
-        function checkTask(button) {
-            let span = button.parentElement.querySelector('span');
-            span.style.textDecoration = "line-through #e80000";
-            saveTasks();
-        }
-
-        function removeTask(button) {
-            button.parentElement.remove();
-            saveTasks();
-        }
-
-        window.onload = function() {
-            loadTasks();
-        }
-    </script>
+    <script src="js/tarefas.js"></script>
 </body>
 </html>
