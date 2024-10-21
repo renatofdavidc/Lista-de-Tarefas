@@ -7,23 +7,47 @@
     <title>Lista de Tarefas</title>
 </head>
 <body>
-    <main>
-        <div class="content">
-            <header>
-                <h1 class="titulo">Lista de Tarefas</h1>
-            </header>
-            <section>
-                <div class="quadro">
-                    <h2 id="titulo_quadro">Sua lista de tarefas</h2>
-                    <input type="text" id="titulo-tarefa" placeholder="Título da tarefa" required>
-                    <input type="text" id="descricao-tarefa" placeholder="Descrição (opcional)">
-                    <button id="adicionar-tarefa-btn">Adicionar Tarefa</button>
-                    <input type="text" id="pesquisar-tarefa" placeholder="Pesquisar tarefa">
-                    <ul id="lista-tarefas"></ul>
-                </div>
+    <div class="content">
+        <header>
+            <h1>Lista de Tarefas</h1>
+        </header>
+        <main>
+            <section id="criar-tarefa">
+                <h2>Criar Nova Tarefa</h2>
+                <form>
+                    <label for="titulo">Título da tarefa:</label>
+                    <input type="text" id="titulo" placeholder="Título da tarefa" required>
+                    
+                    <label for="descricao">Descrição da tarefa:</label>
+                    <textarea id="descricao" placeholder="Descrição da tarefa"></textarea>
+                    
+                    <button type="button" id="btn-criar">Criar Tarefa</button>
+                </form>
             </section>
+            <section id="pesquisar-tarefa">
+                <h2>Pesquisar Tarefa</h2>
+                <form>
+                    <label for="pesquisa">Pesquisar:</label>
+                    <input type="text" id="pesquisa" placeholder="Pesquisar tarefa">
+                    <button type="button" id="btn-pesquisa">Pesquisar</button>
+                </form>
+            </section>
+            <section id="lista-tarefas">
+                <h2>Tarefas</h2>
+                <ul id="listaTarefas"></ul>
+            </section>
+        </main>
+    </div>
+    <footer>
+        <div class="conteudo_footer">
+            <p>&copy; 2023 Lista de Tarefas</p>
+            <h5>Renato de Freitas David Campiteli</h5>
+            <h5>renatofdavidc@gmail.com</h5>
+            <h5>(11) 97210-8084</h5>
+            <h5>https://github.com/renatofdavidc</h5>
+            <h5>www.linkedin.com/in/renato-campiteli</h5>
         </div>
-    </main>
+    </footer>
     <script src="js/tarefas.js"></script>
 </body>
 </html>
