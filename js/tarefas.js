@@ -1,63 +1,80 @@
-// Função para carregar as tarefas salvas do localStorage
 function loadTasks() {
-    const tarefas = JSON.parse(localStorage.getItem('tarefas')) || [];
-    const listaTarefas = document.getElementById('lista-tarefas');
-    listaTarefas.innerHTML = '';
+    fetch('tarefas.php')
+        .then(response => response.json())
+        .then(tarefas => {
+            const listaTarefas = document.getElementById('lista-tarefas');
+            listaTarefas.innerHTML = '';
 
-    tarefas.forEach((tarefa, index) => {
-        const li = document.createElement('li');
-        li.innerHTML = `
-            <input type="checkbox" ${tarefa.concluida ? 'checked' : ''} onchange="toggleTask(${index})">
-            <span ${tarefa.concluida ? 'style="text-decoration: line-through;"' : ''}>${tarefa.tarefa}</span>
-            <button onclick="deleteTask(${index})">Remover</button>
+            const pendentes = tarefas.filter(tarefa => !tarefa.concluida);
+            const concluidas = tarefas.filter(tarefa => tarefa.concluida);
+
+            pendentes.forEach((tarefa, index) => {
+                listaTarefas.innerHTML += createTaskHTML(tarefa, index, false);
+            });
+
+            concluidas.forEach((tarefa, index) => {
+                listaTarefas.innerHTML += createTaskHTML(tarefa, index, true);
+            });
+        });
+}
+
+function createTaskHTML(tarefa, index, concluida) {
+    return `
+        <li>
+            <input type="checkbox" ${concluida ? 'checked' : ''} onchange="toggleTask(${index})">
+            <span ${concluida ? 'style="text-decoration: line-through;"' : ''}>${tarefa.titulo}</span>
             <button onclick="editTask(${index})">Editar</button>
-        `;
-        listaTarefas.appendChild(li);
-    });
+            <button onclick="deleteTask(${index})">Remover</button>
+        </li>
+    `;
 }
 
-function addTask() {
-    const input = document.getElementById('nova-tarefa');
-    const tarefa = input.value;
+document.getElementById('adicionar-tarefa-btn').addEventListener('click', () => {
+    const titulo = document.getElementById('titulo-tarefa').value;
+    const descricao = document.getElementById('descricao-tarefa').value;
 
-    if (tarefa.trim() !== '') {
-        const tarefas = JSON.parse(localStorage.getItem('tarefas')) || [];
-        tarefas.push({ tarefa: tarefa, concluida: false });
-        localStorage.setItem('tarefas', JSON.stringify(tarefas));
-        loadTasks(); 
-        input.value = ''; 
-    } else {
-        alert('Por favor, adicione uma tarefa válida.');
-    }
-}
+    fetch('tarefas.php', {
+        method: 'POST',
+        body: new URLSearchParams({ titulo, descricao })
+    }).then(loadTasks);
+});
 
 function editTask(index) {
-    const tarefas = JSON.parse(localStorage.getItem('tarefas')) || [];
-    const novaTarefa = prompt('Edite a tarefa:', tarefas[index].tarefa);
+    const novoTitulo = prompt('Novo título da tarefa:');
+    const novaDescricao = prompt('Nova descrição da tarefa:');
 
-    if (novaTarefa !== null && novaTarefa.trim() !== '') {
-        tarefas[index].tarefa = novaTarefa;
-        localStorage.setItem('tarefas', JSON.stringify(tarefas));
-        loadTasks();
-    } else {
-        alert('Tarefa inválida.');
-    }
-}
-
-function toggleTask(index) {
-    const tarefas = JSON.parse(localStorage.getItem('tarefas')) || [];
-    tarefas[index].concluida = !tarefas[index].concluida;
-    localStorage.setItem('tarefas', JSON.stringify(tarefas));
-    loadTasks();
+    fetch('tarefas.php', {
+        method: 'POST',
+        body: new URLSearchParams({ id: index, titulo: novoTitulo, descricao: novaDescricao })
+    }).then(loadTasks);
 }
 
 function deleteTask(index) {
-    const tarefas = JSON.parse(localStorage.getItem('tarefas')) || [];
-    tarefas.splice(index, 1);
-    localStorage.setItem('tarefas', JSON.stringify(tarefas));
-    loadTasks();
+    fetch(`tarefas.php?id=${index}`, {
+        method: 'DELETE'
+    }).then(loadTasks);
 }
 
-document.getElementById('adicionar-tarefa-btn').addEventListener('click', addTask);
+function toggleTask(index) {
+    fetch(`tarefas.php`, {
+        method: 'PATCH',
+        body: new URLSearchParams({ id: index })
+    }).then(loadTasks);
+}
+
+document.getElementById('pesquisar-tarefa').addEventListener('input', function() {
+    const pesquisa = this.value;
+
+    fetch(`tarefas.php?pesquisa=${pesquisa}`)
+        .then(response => response.json())
+        .then(tarefas => {
+            const listaTarefas = document.getElementById('lista-tarefas');
+            listaTarefas.innerHTML = '';
+
+            tarefas.forEach((tarefa, index) => {
+                listaTarefas.innerHTML += createTaskHTML(tarefa, index, tarefa.concluida);
+            });
+        });
+});
 
 window.onload = loadTasks;
